@@ -5,6 +5,11 @@ from cryptography.fernet import Fernet
 '''
 test file path:
 "/home/hosalikar/walnut/testfile.txt"
+
+TODO:
+-Acquire current permissions before locking
+-Lock pass file
+
 '''
 
 def validate_path(file_path):
@@ -36,8 +41,7 @@ def lock(file_path):
 
 	print("File locked successfully!")
 
-file_path = "/home/hosalikar/walnut/testfile.txt"
-#file_path = input("Enter the path of the file you want to lock: ")
+file_path = input("Enter the path of the file you want to lock: ")
 validate_path(file_path)
 password = getpass.getpass("Set a password to lock the file: ")
 store_pass(encrypt(password))
