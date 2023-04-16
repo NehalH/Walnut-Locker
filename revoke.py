@@ -10,8 +10,6 @@ TODO:
 -Acquire current permissions before locking
 -Lock pass file
 -Encryption key
-- .password file
-
 '''
 
 def validate_path(file_path):
