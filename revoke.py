@@ -11,6 +11,7 @@ TODO:
 -Lock pass file
 -Encryption key
 - .password file
+-Dict for pass and current permissions
 
 '''
 
@@ -31,6 +32,12 @@ def encrypt(password):
 	key = b'q6IDZLj0VHEgiYtn-5jejIEbMJyUnBi5cDLlOuyC3VU='
 	fernet = Fernet(key)
 	return fernet.encrypt(password.encode())
+	
+def store_curr_per(file_path):
+
+	st = os.stat(file_path)
+	oct_perm = oct(st.st_mode)
+	print(oct_perm)
 
 def store_pass(encrypted_password):
 
@@ -47,6 +54,7 @@ def lock(file_path):
 file_path = input("Enter the path of the file you want to lock: ")
 validate_path(file_path)
 password = getpass.getpass("Set a password to lock the file: ")
+store_curr_per(file_path)
 store_pass(encrypt(password))
 lock(file_path)
 

@@ -17,7 +17,7 @@ def validate_path(file_path):
 	if os.access(file_path, os.W_OK):
 		print("Error: File is already open")
 		exit()
-		
+
 def fetch_pass():
 
 	with open("password.txt", "rb") as file:
@@ -35,7 +35,7 @@ def auth(password, stored_password):
 
 	if password == stored_password:
 		# Restore permissions for the owner of the file
-		os.chmod(file_path, 0o700)
+		os.chmod(file_path, 0o100700)
 		print("File unlocked successfully!")
 	else:
 		print("Invalid password. File remains locked.")
