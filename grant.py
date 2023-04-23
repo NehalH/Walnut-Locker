@@ -1,12 +1,25 @@
 import os
 import getpass
 from cryptography.fernet import Fernet
+from PyQt5.QtWidgets import QApplication, QFileDialog
 
 """
 TODO:
 -Encryption key
 
 """
+
+def file_dialogue():
+
+	app = QApplication([])
+	file_dialog = QFileDialog()
+	file_dialog.setFileMode(QFileDialog.ExistingFile)
+	if file_dialog.exec_() == QFileDialog.Accepted:
+		file_path = file_dialog.selectedFiles()[0]
+		print(f"Selected file: {file_path}")
+		return file_path
+	else:
+		print("File selection cancelled")
 
 def validate_path(file_path):
 
@@ -40,7 +53,7 @@ def auth(password, stored_password):
 	else:
 		print("Invalid password. File remains locked.")
     
-file_path = input("Enter the path of the file you want to unlock: ").strip()
+file_path = file_dialogue()
 validate_path(file_path)
 password = getpass.getpass("Enter the password to unlock the file: ")
 stored_password = decrypt(fetch_pass())

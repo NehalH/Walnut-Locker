@@ -1,6 +1,7 @@
 import os
 import getpass
 from cryptography.fernet import Fernet
+from PyQt5.QtWidgets import QApplication, QFileDialog
 
 '''
 test file path:
@@ -14,6 +15,18 @@ TODO:
 -Dict for pass and current permissions
 
 '''
+
+def file_dialogue():
+
+	app = QApplication([])
+	file_dialog = QFileDialog()
+	file_dialog.setFileMode(QFileDialog.ExistingFile)
+	if file_dialog.exec_() == QFileDialog.Accepted:
+		file_path = file_dialog.selectedFiles()[0]
+		print(f"Selected file: {file_path}")
+		return file_path
+	else:
+		print("File selection cancelled")
 
 def validate_path(file_path):
 	
@@ -51,7 +64,7 @@ def lock(file_path):
 
 	print("File locked successfully!")
 
-file_path = input("Enter the path of the file you want to lock: ")
+file_path = file_dialogue()
 validate_path(file_path)
 password = getpass.getpass("Set a password to lock the file: ")
 store_curr_per(file_path)
