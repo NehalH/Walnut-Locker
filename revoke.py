@@ -18,6 +18,7 @@ TODO:
 
 def file_dialogue():
 
+	# Show password dialogue
 	app = QApplication([])
 	file_dialog = QFileDialog()
 	file_dialog.setFileMode(QFileDialog.ExistingFile)
@@ -30,6 +31,7 @@ def file_dialogue():
 
 def validate_path(file_path):
 	
+	# Validate entered password
 	if not os.path.exists(file_path):
 		print("Error: File path does not exist")
 		exit()
@@ -47,13 +49,17 @@ def encrypt(password):
 	return fernet.encrypt(password.encode())
 	
 def store_curr_per(file_path):
-
+	
+	# Store the permissions of the file before removing them
 	st = os.stat(file_path)
 	oct_perm = oct(st.st_mode)
 	print(oct_perm)
+	with open('perm.txt', 'w') as f:
+    		f.write(oct_perm)
 
 def store_pass(encrypted_password):
-
+	
+	# Store the encrypted password
 	with open('password.txt', 'wb') as f:
     		f.write(encrypted_password)
 		
@@ -61,7 +67,6 @@ def lock(file_path):
 
 	# Change the file permissions to remove all access for all users
 	os.chmod(file_path, 0)
-
 	print("File locked successfully!")
 
 file_path = file_dialogue()

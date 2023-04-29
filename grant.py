@@ -82,11 +82,16 @@ def decrypt(encrypted_password):
 def auth(password, stored_password):
     if password == stored_password:
         # Restore permissions for the owner of the file
-        os.chmod(file_path, 0o100700)
+        os.chmod(file_path, fetch_stored_perm())
         print("File unlocked successfully!")
     else:
         print("Invalid password. File remains locked.")
 
+def fetch_stored_perm():
+
+    with open("perm.txt", "r") as file:
+        stored_perm = file.read().strip()
+    return int(stored_perm, 8)
 
 file_path = file_dialogue()
 if file_path is None:
