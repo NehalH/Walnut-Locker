@@ -1,48 +1,21 @@
 import os
 import getpass
 from cryptography.fernet import Fernet
-from PyQt5.QtWidgets import QApplication, QFileDialog
 import shelve
+from gui import pathdialogue
+from gui import accesscodeprompt as passprompt
 
 '''
 test file path:
-/home/hosalikar/walnut/testfile.txt
+/home/hosalikar/walnut/test/*
 
 TODO:
 -Lock pass file
 -Encryption key
 - .password file
--Dict for pass and current permissions
-
-import shelve
-
-# Open the shelf file in read-write mode
-with shelve.open('passwords.db', 'c') as db:
-    # Add a new entry to the dictionary
-    db['/home/user/file1.txt'] = 'password1'
-    db['/home/user/file2.txt'] = 'password2'
-
-    # Retrieve a password for a specific file path
-    password = db.get('/home/user/file1.txt', None)
-    if password:
-        print(f"Password for /home/user/file1.txt: {password}")
-    else:
-        print("No password found for /home/user/file1.txt")
+-Accept Directories
 
 '''
-
-def file_dialogue():
-
-	# Show password dialogue
-	app = QApplication([])
-	file_dialog = QFileDialog()
-	file_dialog.setFileMode(QFileDialog.ExistingFile)
-	if file_dialog.exec_() == QFileDialog.Accepted:
-		file_path = file_dialog.selectedFiles()[0]
-		print(f"Selected file: {file_path}")
-		return file_path
-	else:
-		print("File selection cancelled")
 
 def validate_path(file_path):
 	
@@ -101,9 +74,9 @@ def lock(file_path):
 	os.chmod(file_path, 0)
 	print("File locked successfully!")
 
-file_path = file_dialogue()
+file_path = pathdialogue.file_dialogue()
 validate_path(file_path)
-password = getpass.getpass("Set a password to lock the file: ")
+password = passprompt.setpass_prompt()
 store_curr_per(file_path)
 store_pass(file_path,encrypt(password))
 lock(file_path)

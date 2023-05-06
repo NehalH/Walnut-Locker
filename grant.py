@@ -1,53 +1,8 @@
 import os
-import getpass
 import shelve
 from cryptography.fernet import Fernet
-from PyQt5.QtWidgets import QApplication, QFileDialog
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton, QVBoxLayout
-import sys
-from PyQt5.QtWidgets import QApplication
-
-def pass_dialogue():
-    app = QApplication(sys.argv)
-    password_dialog = QDialog()
-    password_dialog.setWindowTitle("Enter Password")
-    layout = QVBoxLayout()
-
-    label = QLabel("Password:")
-    layout.addWidget(label)
-
-    password_field = QLineEdit()
-    password_field.setEchoMode(QLineEdit.Password)
-    layout.addWidget(password_field)
-
-    ok_button = QPushButton("OK")
-    ok_button.clicked.connect(password_dialog.accept)
-    layout.addWidget(ok_button)
-
-    cancel_button = QPushButton("Cancel")
-    cancel_button.clicked.connect(password_dialog.reject)
-    layout.addWidget(cancel_button)
-
-    password_dialog.setLayout(layout)
-
-    if password_dialog.exec_() == QDialog.Accepted:
-        password = password_field.text()
-        return password
-
-    return None
-
-
-def file_dialogue():
-    app = QApplication([])
-    file_dialog = QFileDialog()
-    file_dialog.setFileMode(QFileDialog.ExistingFile)
-    if file_dialog.exec_() == QFileDialog.Accepted:
-        file_path = file_dialog.selectedFiles()[0]
-        print(f"Selected file: {file_path}")
-        return file_path
-    else:
-        print("File selection cancelled")
-        return None
+from gui import accesscodeprompt as passprompt
+from gui import pathdialogue
 
 
 def validate_path(file_path):
@@ -104,11 +59,11 @@ def fetch_stored_perm():
             print(f"No Access mode found for {file_path}")
     return int(stored_perm, 8)
 
-file_path = file_dialogue()
+file_path = pathdialogue.file_dialogue()
 if file_path is None:
     exit()
 validate_path(file_path)
-password = pass_dialogue()
+password = passprompt.grant_pass_prompt()
 if password is None:
     exit()
 stored_password = decrypt(fetch_pass(file_path))
