@@ -1,17 +1,11 @@
 import os
 import getpass
+import shelve
 from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton, QVBoxLayout
 import sys
 from PyQt5.QtWidgets import QApplication
-
-
-"""
-TODO:
--Encryption key
-
-"""
 
 def pass_dialogue():
     app = QApplication(sys.argv)
@@ -66,9 +60,17 @@ def validate_path(file_path):
         exit()
 
 
-def fetch_pass():
-    with open("password.txt", "rb") as file:
-        stored_password = file.read()
+def fetch_pass(file_path):
+    with shelve.open('accesscodes.db', 'r') as ac:
+
+        stored_password = ac.get(file_path, None)
+        ### For debugging
+        if stored_password:
+            print(f"Access code for {file_path}: {stored_password}")
+        else:
+            print(f"No Access mode found for {file_path}")
+    #with open("password.txt", "rb") as file:
+    #    stored_password = file.read()
     return stored_password
 
 
@@ -90,8 +92,16 @@ def auth(password, stored_password):
 def fetch_stored_perm():
 	
 	# Fetch previous permissions for the file
-    with open("perm.txt", "r") as file:
-        stored_perm = file.read().strip()
+    #with open("perm.txt", "r") as file:
+    #    stored_perm = file.read().strip()
+    with shelve.open('accessmodes.db', 'r') as am:
+          
+        stored_perm = am.get(file_path, None)
+        ### For debugging
+        if stored_perm:
+            print(f"Access mode for {file_path}: {stored_perm}")
+        else:
+            print(f"No Access mode found for {file_path}")
     return int(stored_perm, 8)
 
 file_path = file_dialogue()
@@ -101,6 +111,6 @@ validate_path(file_path)
 password = pass_dialogue()
 if password is None:
     exit()
-stored_password = decrypt(fetch_pass())
+stored_password = decrypt(fetch_pass(file_path))
 auth(password, stored_password)
 
