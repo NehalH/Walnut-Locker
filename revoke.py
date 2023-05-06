@@ -2,17 +2,32 @@ import os
 import getpass
 from cryptography.fernet import Fernet
 from PyQt5.QtWidgets import QApplication, QFileDialog
+import shelve
 
 '''
 test file path:
 /home/hosalikar/walnut/testfile.txt
 
 TODO:
--Acquire current permissions before locking
 -Lock pass file
 -Encryption key
 - .password file
 -Dict for pass and current permissions
+
+import shelve
+
+# Open the shelf file in read-write mode
+with shelve.open('passwords.db', 'c') as db:
+    # Add a new entry to the dictionary
+    db['/home/user/file1.txt'] = 'password1'
+    db['/home/user/file2.txt'] = 'password2'
+
+    # Retrieve a password for a specific file path
+    password = db.get('/home/user/file1.txt', None)
+    if password:
+        print(f"Password for /home/user/file1.txt: {password}")
+    else:
+        print("No password found for /home/user/file1.txt")
 
 '''
 
@@ -53,15 +68,32 @@ def store_curr_per(file_path):
 	# Store the permissions of the file before removing them
 	st = os.stat(file_path)
 	oct_perm = oct(st.st_mode)
-	print(oct_perm)
-	with open('perm.txt', 'w') as f:
-    		f.write(oct_perm)
+	print("Current permissions: ",oct_perm)	### For debugging
 
-def store_pass(encrypted_password):
+	with shelve.open('accessmodes.db', 'c') as am:
+		# Add a new entry to the dictionary
+		am[file_path] = oct_perm
+  
+		### For debugging
+		perms = am.get(file_path, None)
+		if perms:
+			print(f"Access mode for {file_path}: {perms}")
+		else:
+			print(f"No Access mode found for {file_path}")
+
+def store_pass(file_path,encrypted_password):
 	
 	# Store the encrypted password
-	with open('password.txt', 'wb') as f:
-    		f.write(encrypted_password)
+	with shelve.open('accesscodes.db', 'c') as ac:
+		# Add a new entry to the dictionary
+		ac[file_path] = encrypted_password
+  
+		### For debugging
+		code = ac.get(file_path, None)
+		if code:
+			print(f"Access code for {file_path}: {code}")
+		else:
+			print(f"No Access mode found for {file_path}")
 		
 def lock(file_path):
 
@@ -73,6 +105,6 @@ file_path = file_dialogue()
 validate_path(file_path)
 password = getpass.getpass("Set a password to lock the file: ")
 store_curr_per(file_path)
-store_pass(encrypt(password))
+store_pass(file_path,encrypt(password))
 lock(file_path)
 

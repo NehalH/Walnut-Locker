@@ -88,7 +88,8 @@ def auth(password, stored_password):
         print("Invalid password. File remains locked.")
 
 def fetch_stored_perm():
-
+	
+	# Fetch previous permissions for the file
     with open("perm.txt", "r") as file:
         stored_perm = file.read().strip()
     return int(stored_perm, 8)
