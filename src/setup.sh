@@ -15,4 +15,4 @@ echo "-w $directory $options" >> /etc/audit/audit.rules
 echo "-w $pattern $options" >> /etc/audit/audit.rules
 
 # Restart the auditd service
-service auditd restart
+sudo service auditd restart

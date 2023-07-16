@@ -1,0 +1,2 @@
+1. chmod +x setup.sh
+2. sudo ./setup.sh
