@@ -43,7 +43,7 @@ def store_curr_per(file_path):
 	oct_perm = oct(st.st_mode)
 	print("Current permissions: ",oct_perm)	### For debugging
 
-	with shelve.open('accessmodes.db', 'c') as am: # Change to 'w' for production
+	with shelve.open('data/accessmodes.db', 'c') as am: # Change to 'w' for production
 		# Add a new entry to the dictionary
 		am[file_path] = oct_perm
   
@@ -57,7 +57,7 @@ def store_curr_per(file_path):
 def store_pass(file_path,encrypted_password):
 	
 	# Store the encrypted password
-	with shelve.open('accesscodes.db', 'c') as ac: # Change to 'w' for production
+	with shelve.open('data/accesscodes.db', 'c') as ac: # Change to 'w' for production
 		# Add a new entry to the dictionary
 		ac[file_path] = encrypted_password
   

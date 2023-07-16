@@ -1,11 +1,13 @@
 import inotify.adapters
 import os
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
 # path to the lock file
-lock_file_path = "./lockfile.txt"
+lock_file_path = os.path.join(script_dir, "data", "lockfile.txt")
 
 # path to the Unlock.py script
-unlock_script_path = "./grant.py"
+unlock_script_path = os.path.join(script_dir, "grant.py")
 
 def is_file_locked(file_path):
     # check if the file is listed in the lock file

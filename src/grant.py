@@ -15,7 +15,7 @@ def validate_path(file_path):
 		exit()
 
 def fetch_pass(file_path):
-	with shelve.open('accesscodes.db', 'r') as ac:
+	with shelve.open('data/accesscodes.db', 'r') as ac:
 		stored_password = ac.get(file_path, None)
 		### For debugging
 		if stored_password:
@@ -45,7 +45,7 @@ def fetch_stored_perm():
 	# Fetch previous permissions for the file
 	#with open("perm.txt", "r") as file:
 	#	stored_perm = file.read().strip()
-	with shelve.open('accessmodes.db', 'r') as am:
+	with shelve.open('data/accessmodes.db', 'r') as am:
 
 		stored_perm = am.get(file_path, None)
 		### For debugging
