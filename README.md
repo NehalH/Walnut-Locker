@@ -1,4 +1,4 @@
-# Walnut Locker
+# Walnut Locker 🌰🔒
 A file/application locker that controls user access for applications, files, and directories by leveraging the Operating System.
 
 ## Description
